@@ -1,19 +1,16 @@
-export const ADD_RECIPE="ADD_RECIPE"
-export const REMOVE_FROM_CALENDAR="REMOVE_FROM_CALENDAR"
+export const GET_CATEGORIES_SUCCESS="GET_CATEGORIES_SUCCESS"
+export const GET_POSTS_SUCCESS="GET_POSTS_SUCCESS"
 
-export function addRecipe({day,recipe,meal}){
+export function categoriesFetchSuccess({categories}){
 	return {
-		type: ADD_RECIPE,
-		day,
-		recipe,
-		meal
+		type: GET_CATEGORIES_SUCCESS,
+		categories
 	}
 }
 
-export function removeFromCalandar({day,meal}){
+export function postsFetchSuccess(posts){
 	return{
-		type: REMOVE_FROM_CALENDAR,
-		day,
-		meal
+		type: GET_POSTS_SUCCESS,
+		posts
 	}
 }
