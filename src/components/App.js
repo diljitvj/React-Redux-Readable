@@ -10,14 +10,11 @@ class App extends Component {
     return (
       <div className="app">
         <Route path="/" exact
-          render={() => (
-            <RootComponent />)} />
-        <Route path="/category" exact
-          render={() => (
-            <CategoryComponent />)} />
-        <Route path="/post" exact
-          render={() => (
-            <PostComponent />)} />
+          component={RootComponent} />
+        <Route path="/category/:id" exact
+          component={CategoryComponent} />
+        <Route path="/post/:id" exact
+          component={PostComponent} />
       </div>
     );
   }
