@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import HeaderComponent from './HeaderComponent'
 import PostHeadingComponent from './PostHeadingComponent'
 import { fetchPostsForCategory, fetchPostData, addNewPostForCategory } from '../actions'
 import Modal from 'react-modal'
@@ -8,7 +9,8 @@ import Modal from 'react-modal'
 class CategoryComponent extends Component {
     state = {
         newPostModalOpen: false,
-        selectedCategory: ''
+        selectedCategory: '',
+        errormsg: ''
     }
     componentDidMount() {
         // console.log(this.props.match.params.id)
@@ -20,17 +22,24 @@ class CategoryComponent extends Component {
     }
     openNewPostModal = () => {
         this.setState({
-            newPostModalOpen: true
+            newPostModalOpen: true,
+            errormsg: ''
         })
     }
     closeNewPostModal = () => {
         this.setState({
-            newPostModalOpen: false
+            newPostModalOpen: false,
+            errormsg: ''
         })
     }
     addPost = () => {
-        // console.log(this)
-        const {postTitle, postBody, postAuthor} = this
+        const { postTitle, postBody, postAuthor } = this
+        if(postTitle.value === '' || this.postBody.value === '' || this.postAuthor === ''){
+            this.setState({
+                errormsg: 'Please fill all fields'
+            })
+            return false
+        }
         const now = Date.now()
         const payload = {
             title: postTitle.value,
@@ -45,15 +54,13 @@ class CategoryComponent extends Component {
     }
     render() {
         const { categories, posts } = this.props
-        const { newPostModalOpen } = this.state
-        let categoryPosts
+        const { newPostModalOpen, errormsg } = this.state
         const category = this.props.match.params.id
-        if (categories[category] && categories[category].posts)
-            categoryPosts = categories[category].posts
-
-        if (categoryPosts && posts != {}) {
+        if (!posts.loading && categories[category].posts){
+            const categoryPosts = categories[category].posts
             return (
                 <div>
+                    <HeaderComponent showBackButton={true} path={'/'} />
                     <h1>{category}</h1>
                     <button onClick={() => this.openNewPostModal()}>Add new post</button>
                     {
@@ -73,7 +80,7 @@ class CategoryComponent extends Component {
                         contentLabel='Modal'
                     >
                         <div>
-                            <h1>Modal
+                            <h3>Add New Post</h3>
                                 <button onClick={this.closeNewPostModal}>X</button>
                                 <input
                                     className='post-title'
@@ -94,7 +101,7 @@ class CategoryComponent extends Component {
                                     ref={(input) => this.postAuthor = input}
                                 />
                                 <button onClick={this.addPost}>Add Post</button>
-                            </h1>
+                                <span>{errormsg}</span>
                         </div>
                     </Modal>
                 </div>

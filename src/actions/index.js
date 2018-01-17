@@ -8,16 +8,20 @@ import {
 	addCommentForPost,
 	votePost,
 	editPost,
-	voteComment
+	voteComment,
+	editComment,
+	deleteComment,
+    deletePost
 } from '../api/api'
 export const GET_CATEGORIES_SUCCESS = "GET_CATEGORIES_SUCCESS"
 export const GET_POSTS_SUCCESS = "GET_POSTS_SUCCESS"
 export const GET_POSTS_FOR_CATEGORY_SUCCESS = "GET_POSTS_FOR_CATEGORY_SUCCESS"
-
+export const CATEGORIES_LOADING = "CATEGORIES_LOADING"
 export const GET_COMMENTS_SUCCESS = "GET_COMMENTS_SUCCESS"
 export const GET_COMMENTS_FOR_POST_SUCCESS = "GET_COMMENTS_FOR_POST_SUCCESS"
 export const GET_POST_SUCCESS = "GET_POST_SUCCESS"
 export const GET_COMMENT_SUCCESS = "GET_COMMENT_SUCCESS"
+export const POSTS_LOADING = "POSTS_LOADING"
 export function categoriesFetchSuccess({ categories }) {
 	return {
 		type: GET_CATEGORIES_SUCCESS,
@@ -25,6 +29,19 @@ export function categoriesFetchSuccess({ categories }) {
 	}
 }
 
+export function categoriesLoading(bool){
+	return {
+		type: CATEGORIES_LOADING,
+		bool
+	}
+}
+
+export function postsLoading(bool){
+	return {
+		type: POSTS_LOADING,
+		bool
+	}
+}
 export function postsFetchSuccess(posts) {
 	return {
 		type: GET_POSTS_SUCCESS,
@@ -70,13 +87,17 @@ export function commentFetchSuccess(comment) {
 }
 export function fetchCategories() {
 	return (dispatch) => {
+		dispatch(categoriesLoading(true))
 		getAllCategories()
 			.then((items) => dispatch(categoriesFetchSuccess(items)))
+			.then(response => dispatch(fetchPosts()))
+			.then(response => dispatch(categoriesLoading(false)))
 	};
 }
 
 export function fetchPosts() {
 	return (dispatch) => {
+		dispatch(postsLoading(true))
 		getAllPosts()
 			.then((items) => dispatch(postsFetchSuccess(items)))
 	}
@@ -84,9 +105,11 @@ export function fetchPosts() {
 
 export function fetchPostsForCategory(categoryId) {
 	return (dispatch) => {
+		dispatch(postsLoading(true))
 		getPostsForCategory(categoryId)
 			.then(posts => dispatch(postsForCategoryFetchSuccess({ posts, categoryId })))
 			.then(({ posts }) => dispatch(postsFetchSuccess(posts)))
+			.then(response => dispatch(postsLoading(false)))
 	}
 }
 
@@ -142,5 +165,26 @@ export function voteOnComment(commentId, option) {
 	return (dispatch) => {
 		voteComment(commentId, option)
 			.then(comment => dispatch(commentFetchSuccess(comment)))
+	}
+}
+
+export function editExistingComment(commentId, commentDetails){
+	return (dispatch) => {
+		editComment(commentId, commentDetails)
+			.then(comment => dispatch(commentFetchSuccess(comment)))
+	}
+}
+
+export function deleteExistingComment(commentId, postId){
+	return (dispatch) => {
+		deleteComment(commentId)
+			.then(response => dispatch(fetchCommentsForPost(postId)))
+	}
+}
+
+export function deleteExistingPost(postId){
+	return (dispatch) => {
+		deletePost(postId)
+			.then(post => dispatch(fetchPostsForCategory(post.category)))
 	}
 }

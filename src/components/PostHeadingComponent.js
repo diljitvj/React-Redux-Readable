@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import './PostHeadingComponent.css'
+// import { connect } from 'react-redux';
+// import { deleteExistingPost } from '../actions' 
+
 class PostHeadingComponent extends Component {
     render() {
         // console.log(this.props)
@@ -13,6 +16,7 @@ class PostHeadingComponent extends Component {
                     <span className="post-author">
                         {post.author}
                     </span>
+                    {/* <button onClick={this.deletePost}>Delete Post</button> */}
                 </div>
             )
         }
@@ -21,5 +25,8 @@ class PostHeadingComponent extends Component {
         }
     }
 }
+
+
+// export default connect(mapDispatchToProps)(PostHeadingComponent);
 
 export default PostHeadingComponent

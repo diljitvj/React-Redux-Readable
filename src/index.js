@@ -11,7 +11,7 @@ import './index.css';
 
 const store = createStore(
     reducer,
-    {categories: {}, posts: {}, comments: {}},
+    {categories: {loading:true}, posts: {loading: true}, comments: {}},
     compose(
         applyMiddleware(thunk),
         window.devToolsExtension ? window.devToolsExtension() : f => f

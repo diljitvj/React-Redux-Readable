@@ -5,12 +5,16 @@ import {
 	GET_COMMENTS_SUCCESS,
 	GET_COMMENTS_FOR_POST_SUCCESS,
 	GET_POST_SUCCESS,
-	GET_COMMENT_SUCCESS
+	GET_COMMENT_SUCCESS,
+	CATEGORIES_LOADING,
+	POSTS_LOADING
 	} from '../actions'
 
 import { combineReducers } from 'redux'
 
-let initialState = {}
+let initialState = {
+	loading: true
+}
 
 function categories(state = initialState, action) {
 	switch (action.type) {
@@ -19,9 +23,11 @@ function categories(state = initialState, action) {
 			action.categories.map(category => {
 				categories[category.name] = { ...category }
 			})
+			// console.log(state)
 			return {
 				...state,
-				...categories
+				...categories,
+				loading: false
 			}
 		case GET_POSTS_FOR_CATEGORY_SUCCESS:
 			let posts = []
@@ -31,8 +37,14 @@ function categories(state = initialState, action) {
 			return {
 				...state,
 				[action.categoryId]: {
+					...state[action.categoryId],
 					posts: posts
 				}
+			}
+		case CATEGORIES_LOADING:
+			return {
+				...state,
+				loading: action.bool
 			}
 		default:
 			return state
@@ -52,7 +64,8 @@ function posts(state = initialState, action) {
 			})
 			return {
 				...state,
-				...posts
+				...posts,
+				loading: false
 			}
 		case GET_COMMENTS_FOR_POST_SUCCESS:
 		comments = []
@@ -78,6 +91,11 @@ function posts(state = initialState, action) {
 					comments: comments
 					}
 				}
+		case POSTS_LOADING:
+		return {
+			...state,
+			loading: action.bool
+		}
 		default:
 			return state
 	}
