@@ -1,10 +1,35 @@
-.post{
-
+.post {
+    border: 1px solid #ccc;
+    padding: 5px;
+    margin-top: 5px;
 }
-.post-body{
+.post.no-border{
+    border: none;
+}
+.post:hover{
+    border: 1px solid #27ae60;
+}
+.post.no-border:hover{
+    border: none;
+}
+
+.post-title {
     width: 100%;
     display: inline-block;
+    font-size: 18px;
+    padding-top: 5px;
+    padding-bottom: 5px;
 }
-.post-author{
-    
+
+.post-author {
+    color: #27ae60;
+}
+
+.post-time{
+    padding: 5px;
+    padding-left: 10px;
+}
+.post-comments{
+    padding: 5px;
+    padding-left: 10px;
 }

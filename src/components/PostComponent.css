@@ -1,0 +1,12 @@
+.post-component-wrapper{
+  padding: 10px;
+}
+.add-new-wrapper{
+  content: " ";
+    clear: both;
+    display: table;
+    width: 100%;
+    line-height: 32px;
+    padding-top: 10px;
+    border-top: 1px solid black;
+}

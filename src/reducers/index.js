@@ -20,10 +20,9 @@ function categories(state = initialState, action) {
 	switch (action.type) {
 		case GET_CATEGORIES_SUCCESS:
 			let categories = {}
-			action.categories.map(category => {
+			action.categories.forEach(category => {
 				categories[category.name] = { ...category }
 			})
-			// console.log(state)
 			return {
 				...state,
 				...categories,
@@ -31,7 +30,7 @@ function categories(state = initialState, action) {
 			}
 		case GET_POSTS_FOR_CATEGORY_SUCCESS:
 			let posts = []
-			action.posts.map(post => {
+			action.posts.forEach(post => {
 				posts.push(post.id)
 			})
 			return {
@@ -51,12 +50,11 @@ function categories(state = initialState, action) {
 	}
 }
 function posts(state = initialState, action) {
-	// console.log(action)
 	let posts, comments = []
 	switch (action.type) {
 		case GET_POSTS_SUCCESS:
 		posts = {}
-			action.posts.map(post => {
+			action.posts.forEach(post => {
 				posts[post.id] = { 
 					...post,
 					comments: [] 
@@ -69,7 +67,7 @@ function posts(state = initialState, action) {
 			}
 		case GET_COMMENTS_FOR_POST_SUCCESS:
 		comments = []
-			action.comments.map(comment => {
+			action.comments.forEach(comment => {
 				comments.push(comment.id)
 			})
 			return {
@@ -105,14 +103,13 @@ function comments(state = initialState, action){
 	switch (action.type) {
 		case GET_COMMENTS_SUCCESS:
 		let comments = {}
-			action.comments.map(comment => {
+			action.comments.forEach(comment => {
 				comments[comment.id] = { ...comment }
 			})
 			return {
 				...state,
 				...comments
 			}
-		break
 		case GET_COMMENT_SUCCESS:
 		let commentId = action.comment.id
 		return {

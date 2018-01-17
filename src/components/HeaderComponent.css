@@ -9,7 +9,15 @@
     height: 100%;
     float: left;
 }
-
+.back-button svg{
+    fill: #f1c40f;
+}
+.back-button a svg{
+    fill: black;
+}
+.back-button:hover a svg{
+    fill: #f1c40f;
+}
 .header .back-button .hidden{
     display: none;
 }
@@ -17,4 +25,7 @@
     display: inline-block;
     height: 100%;
     font-size: 24px;
+    color: white;
+    letter-spacing: 1px;
+    font-weight: 100;
 }

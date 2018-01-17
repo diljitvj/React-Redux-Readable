@@ -90,7 +90,7 @@ export function fetchCategories() {
 		dispatch(categoriesLoading(true))
 		getAllCategories()
 			.then((items) => dispatch(categoriesFetchSuccess(items)))
-			.then(response => dispatch(fetchPosts()))
+			// .then(response => dispatch(fetchPosts()))
 			.then(response => dispatch(categoriesLoading(false)))
 	};
 }

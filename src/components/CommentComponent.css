@@ -1,0 +1,13 @@
+.icon-button{
+  border: none;
+  cursor: pointer;
+}
+.icon-button.right{
+  float: right;
+}
+.comment{
+  border: 1px solid black;
+  margin-top: 10px;
+  margin-bottom: 5px;
+  padding: 5px;
+}

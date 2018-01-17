@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import MdArrowBack from 'react-icons/lib/md/arrow-back'
 import { Link } from 'react-router-dom'
 import './HeaderComponent.css'
+import MdHome from 'react-icons/lib/md/home'
+
 
 class HeaderComponent extends Component {    
     render() {
@@ -9,9 +11,10 @@ class HeaderComponent extends Component {
         return (
             <div className="header">
                 <div className="back-button">
-                        <Link to={path} className={(showBackButton === true ? 'show': 'hidden')}>
-                        <MdArrowBack size={30}/>
+                        <Link to={path} className={(showBackButton ? 'show': 'hidden')}>
+                            <MdArrowBack size={30}/>
                         </Link>
+                        <MdHome className={(!showBackButton ? 'show': 'hidden')} size={30}/>
                 </div>
                 <div className="heading">Readable</div>
             </div>

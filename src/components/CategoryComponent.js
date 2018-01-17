@@ -3,8 +3,10 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import HeaderComponent from './HeaderComponent'
 import PostHeadingComponent from './PostHeadingComponent'
-import { fetchPostsForCategory, fetchPostData, addNewPostForCategory } from '../actions'
+import { fetchPostsForCategory,  addNewPostForCategory } from '../actions'
 import Modal from 'react-modal'
+import { capitalize } from '../utils/helper'
+import './CategoryComponent.css'
 
 class CategoryComponent extends Component {
     state = {
@@ -13,7 +15,6 @@ class CategoryComponent extends Component {
         errormsg: ''
     }
     componentDidMount() {
-        // console.log(this.props.match.params.id)
         const category = this.props.match.params.id
         this.setState({
             selectedCategory: category
@@ -61,8 +62,11 @@ class CategoryComponent extends Component {
             return (
                 <div>
                     <HeaderComponent showBackButton={true} path={'/'} />
-                    <h1>{category}</h1>
-                    <button onClick={() => this.openNewPostModal()}>Add new post</button>
+                    <div className="category-component-wrapper">
+                    <div>
+                        <h1><span>{capitalize(category)}</span></h1>
+                        <button className="add-new-button" onClick={() => this.openNewPostModal()}>+ New post</button>
+                    </div>
                     {
                         categoryPosts.map(postId => (
                             (
@@ -72,6 +76,7 @@ class CategoryComponent extends Component {
                             )
                         ))
                     }
+                    </div>
                     <Modal
                         className='modal'
                         overlayClassName='overlay'
@@ -81,26 +86,26 @@ class CategoryComponent extends Component {
                     >
                         <div>
                             <h3>Add New Post</h3>
-                                <button onClick={this.closeNewPostModal}>X</button>
                                 <input
-                                    className='post-title'
+                                    className='input'
                                     type='text'
                                     placeholder='Post Title'
                                     ref={(input) => this.postTitle = input}
                                 />
                                 <input
-                                    className='post-body'
+                                    className='input'
                                     type='text'
                                     placeholder='Post body'
                                     ref={(input) => this.postBody = input}
                                 />
                                 <input
-                                    className='post-author'
+                                    className='input'
                                     type='text'
                                     placeholder='Post author'
                                     ref={(input) => this.postAuthor = input}
                                 />
-                                <button onClick={this.addPost}>Add Post</button>
+                                <button className="cancel" onClick={this.closeNewPostModal}>Cancel</button>
+                                <button className="proceed" onClick={this.addPost}>Add Post</button>
                                 <span>{errormsg}</span>
                         </div>
                     </Modal>
@@ -110,7 +115,10 @@ class CategoryComponent extends Component {
         }
         else {
             return (
-                <div>Loading . . .</div>
+                <div>
+                <HeaderComponent showBackButton={true} path={'/'} />
+                <div className="sk-rotating-plane"></div>
+                </div>
             )
         }
     }

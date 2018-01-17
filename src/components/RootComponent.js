@@ -1,46 +1,43 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { fetchCategories, fetchPosts } from '../actions'
+import { fetchCategories } from '../actions'
 import {Link} from 'react-router-dom'
-import PostHeadingComponent from './PostHeadingComponent'
 import './RootComponent.css'
 import HeaderComponent from './HeaderComponent';
-import { capitalize } from './utils/helper'
+import { capitalize } from '../utils/helper'
 
 class RootComponent extends Component {
     componentDidMount() {
         this.props.fetchCategoriesData()
     }
     render() {
-        const { categories, posts, loading } = this.props
+        const { categories, loading } = this.props
         if(!loading){
             return (
-                <div>
+                <div className="">
                     <HeaderComponent showBackButton={false} path={'hello'}/>
+                    <div className="root-component-wrapper">
+                    <h3><span>Categories</span></h3>
+                    <div className="categories-wrapper">
                     {
                         categories.map(category => (
-                            <div key={'wrapper-'+category.name}>
-                            <Link key={'link-'+category.name} to={`/category/${category.name}`}><h4>{capitalize(category.name)}</h4></Link>
-                            <ul key={category.name}>
-                                    {
-                                        posts.map(post => {
-                                            if(post.category === category.name)
-                                                return (
-                                                    <li key={post.id}>
-                                                        <PostHeadingComponent post={post} />
-                                                    </li>
-                                                )
-                                        })
-                                    }
-                            </ul>
+                            <Link key={'link-'+category.name} to={`/category/${category.name}`}>
+                            <div key={'wrapper-'+category.name} className="category">
+                            <h4>{capitalize(category.name)}</h4>
                             </div>
+                            </Link>
                         ))
                     }
+                    </div>
+                    </div>
                 </div>
             )
         } else {
             return (
-                <div>Loading . . .</div>
+                <div>
+                <HeaderComponent showBackButton={false} path={'/'} />
+                <div class="sk-rotating-plane"></div>
+                </div>
             )
         }
     }
@@ -48,9 +45,8 @@ class RootComponent extends Component {
 
 function mapStateToProps(state) {
     let categories = []
-    let posts = []
     let loading
-    Object.keys(state.categories).map(key =>{
+    Object.keys(state.categories).forEach(key =>{
         if(key !== 'loading'){
             let category = state.categories[key]
             categories.push(category)
@@ -58,22 +54,12 @@ function mapStateToProps(state) {
             loading = state.categories[key]
         }
     })
-    Object.keys(state.posts).map(key =>{
-        if(key !== 'loading'){
-            let post = state.posts[key]
-            posts.push(post)
-        } else {
-            loading = loading || state.posts[key]
-        }
-    })
-    console.log(loading)
-    return {categories, posts, loading};
+    return {categories, loading};
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        fetchCategoriesData: () => dispatch(fetchCategories()),
-        fetchPostsData: () => dispatch(fetchPosts())
+        fetchCategoriesData: () => dispatch(fetchCategories())
     };
 };
 

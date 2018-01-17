@@ -3,7 +3,10 @@ import './CommentComponent.css'
 import { connect } from 'react-redux';
 import { voteOnComment, editExistingComment, deleteExistingComment } from '../actions'
 import Modal from 'react-modal'
-
+import FaThumbsOUp from 'react-icons/lib/fa/thumbs-o-up'
+import FaThumbsODown from 'react-icons/lib/fa/thumbs-o-down'
+import FaEdit from 'react-icons/lib/fa/edit'
+import FaTrashO from 'react-icons/lib/fa/trash-o'
 
 class CommentComponent extends Component {
     state = {
@@ -43,18 +46,18 @@ class CommentComponent extends Component {
         const { editCommentModalOpen } = this.state
         if (comment) {
             return (
-                <div className="post">
-                    <span className="post-body">
+                <div className="comment">
+                    <p className="post-body">
                         {comment.body}
-                    </span>
-                    <span className="post-author">
+                    </p>
+                    <p className="post-author">
                         {comment.author}
-                    </span>
+                    </p>
+                    <button className="icon-button" onClick={() => this.voteComment('downVote')}><FaThumbsODown size="20" /></button>
                     <span>{comment.voteScore}</span>
-                    <button onClick={() => this.voteComment('upVote')}>Up Vote</button>
-                    <button onClick={() => this.voteComment('downVote')}>Down Vote</button>
-                    <button onClick={() => this.openEditCommentModal()}>Edit Comment</button>
-                    <button onClick={() => this.deleteComment()}>Delete Comment</button>
+                    <button className="icon-button" onClick={() => this.voteComment('upVote')}><FaThumbsOUp size="20" /></button>
+                    <button className="icon-button right" onClick={() => this.openEditCommentModal()}><FaEdit size="20" /></button>
+                    <button className="icon-button right" onClick={() => this.deleteComment()}><FaTrashO size="20" /></button>
                     <Modal
                         className='modal'
                         overlayClassName='overlay'

@@ -5,6 +5,11 @@ import { connect } from 'react-redux';
 import { fetchPostData, addNewCommentForPost, voteOnPost, editExistingPost, deleteExistingPost } from '../actions'
 import Modal from 'react-modal'
 import HeaderComponent from './HeaderComponent'
+import FaThumbsOUp from 'react-icons/lib/fa/thumbs-o-up'
+import FaThumbsODown from 'react-icons/lib/fa/thumbs-o-down'
+import FaEdit from 'react-icons/lib/fa/edit'
+import FaTrashO from 'react-icons/lib/fa/trash-o'
+import './PostComponent.css'
 
 class PostComponent extends Component {
     state = {
@@ -13,7 +18,6 @@ class PostComponent extends Component {
         selectedPostId: ''
     }
     componentDidMount() {
-        // console.log(this.props.history.push('/category/react'))
         const postId = this.props.match.params.id
         this.setState({
             selectedPostId: postId,
@@ -91,8 +95,10 @@ class PostComponent extends Component {
         this.closeEditPostModal()
     }
     deletePost = () => {
-        this.props.deletePost(this.state.selectedPostId)
-        this.props.history.push('/category/react')
+        const { selectedPostId } = this.state
+        const category = this.props.posts[selectedPostId].category
+        this.props.deletePost(selectedPostId)
+        this.props.history.push(`/category/${category}`)
     }
     render() {
         const { posts, comments } = this.props
@@ -103,20 +109,25 @@ class PostComponent extends Component {
             return (
                 <div>
                     <HeaderComponent showBackButton={true} path={`/category/${post.category}`} />
-                    <PostHeadingComponent post={post} />
-                    <button onClick={() => this.votePost('upVote')}>Up Vote</button>
-                    <button onClick={() => this.votePost('downVote')}>Down Vote</button>
-                    <button onClick={() => this.openEditPostModal()}>Edit Post</button>
-                    <button onClick={this.openNewCommentModal}>Add new comment</button>
-                    <button onClick={this.deletePost}>Delete Post</button>
-                    <p>{post.body}</p>
+                    <div className="post-component-wrapper">
+                    <PostHeadingComponent post={post} parent="post"/>
+                    <button className="icon-button" onClick={() => this.votePost('downVote')}><FaThumbsODown size="20" /></button>
                     <span>{post.voteScore}</span>
+                    <button className="icon-button" onClick={() => this.votePost('upVote')}><FaThumbsOUp size="20"/></button>
+                    <button className="icon-button right" onClick={() => this.openEditPostModal()}><FaEdit size="20"/></button>
+                    <button className="icon-button right" onClick={this.deletePost}><FaTrashO size="20"/></button>
+                    <p>{post.body}</p>
+                    <div className="add-new-wrapper">
+                    <span>Comments </span>
+                    <button className="add-new-button" onClick={this.openNewCommentModal}>+ New comment</button>
+                    </div>
                     {
                         post.comments.map(
                             commentId => (
                                 <CommentComponent key={commentId} comment={comments[commentId]} />
                             )
                         )}
+                    </div>
                     <Modal
                         className='modal'
                         overlayClassName='overlay'
@@ -126,20 +137,20 @@ class PostComponent extends Component {
                     >
                         <div>
                             <h3>Add Comment</h3>
-                                <button onClick={this.closeNewCommentModal}>X</button>
                                 <input
-                                    className='comment-body'
+                                    className='input'
                                     type='text'
                                     placeholder='comment body'
                                     ref={(input) => this.commentBody = input}
                                 />
                                 <input
-                                    className='comment-author'
+                                    className='input'
                                     type='text'
                                     placeholder='comment author'
                                     ref={(input) => this.commentAuthor = input}
                                 />
-                                <button onClick={this.addComment}>Add Comment</button>
+                                <button className="cancel" onClick={this.closeNewCommentModal}>Cancel</button>
+                                <button className="proceed" onClick={this.addComment}>Add Comment</button>
                                 <span>{errormsg}</span>
                         </div>
                     </Modal>
@@ -152,29 +163,24 @@ class PostComponent extends Component {
                     >
                         <div>
                             <h3>Edit Post</h3>
-                                <button onClick={this.closeEditPostModal}>X</button>
+                                <p>Title</p>
                                 <input
-                                    className='post-title'
+                                    className='input'
                                     type='text'
                                     placeholder='Post Title'
                                     defaultValue={post.title}
                                     ref={(input) => this.postTitle = input}
                                 />
+                                 <p>Body</p>
                                 <input
-                                    className='post-body'
+                                    className='input'
                                     type='text'
                                     placeholder='Post body'
                                     defaultValue={post.body}
                                     ref={(input) => this.postBody = input}
                                 />
-                                <input
-                                    className='post-author'
-                                    type='text'
-                                    placeholder='Post author'
-                                    value={post.author}
-                                    disabled
-                                />
-                                <button onClick={this.editPost}>Edit Post</button>
+                                <button className="cancel" onClick={this.closeEditPostModal}>Cancel</button>
+                                <button className="proceed" onClick={this.editPost}>Edit Post</button>
                                 <span>{errormsg}</span>
                         </div>
                     </Modal>
